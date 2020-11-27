@@ -13,6 +13,8 @@ services:
       --scrape_uri="http://apache/server-status?auto"
     labels:
       - traefik.http.routers.apache_exporter.rule=Host(`localhost`)
+      - traefik.http.routers.apache_exporter.middlewares=auth
+      - traefik.http.middlewares.auth.basicauth.users=user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/
   prometheus:
     image: prom/prometheus:latest
     ports:
@@ -21,6 +23,8 @@ services:
       --config.file=/etc/prometheus/prometheus.yml
     labels:
       - traefik.http.routers.prometheus.rule=Host(`localhost`)
+      - traefik.http.routers.prometheus.middlewares=auth
+      - traefik.http.middlewares.auth.basicauth.users=user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/
     volumes:
       - "./prometheus:/etc/prometheus"
       - "./prometheus:/prometheus"
@@ -35,5 +39,4 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
       - "./traefik/traefik.yml:/traefik.yml"
       #- "./traefik/dynamic:/etc/traefik/dynamic"
-    labels:
-      - "traefik.http.middlewares.traefik.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/,test2:$$apr1$$d9hr9HBB$$4HxwgUir3HP4EsggP/QNo0"
+
