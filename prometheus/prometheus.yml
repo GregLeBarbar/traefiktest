@@ -1,0 +1,23 @@
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+    metrics_path: '/metrics'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    
+    honor_labels: true  
+
+    # The targets have to match the docker-compose service name/port !
+    static_configs:
+    - targets: 
+      - 'localhost:9090'
+
+  - job_name: "apache"
+    metrics_path: '/metrics'
+    scrape_interval: "15s"
+    static_configs:
+    - targets: ['apache_exporter:9117']
+

@@ -1,0 +1,16 @@
+http:
+  # routers:
+  #   traefik:
+  #     rule: "Host(`localhost:8080`)"
+  #     service: "api@internal"
+  #     entryPoints: ["webapi"]
+    # metrics:
+    #   rule: "Host(`localhost`) && PathPrefix(`/metrics`)"
+    #   service: "prometheus@internal"
+    #   entryPoints: ["web"]
+  middlewares:
+    basicauth:
+      basicAuth:
+        users:
+          - "test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/"
+          - "test2:$$apr1$$d9hr9HBB$$4HxwgUir3HP4EsggP/QNo0"

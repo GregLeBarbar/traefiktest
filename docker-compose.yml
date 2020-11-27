@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  apache:
+    image: httpd:2.2
+    ports:
+      - 88:80
+    volumes:
+      - "./my-httpd.conf:/usr/local/apache2/conf/httpd.conf"
+  apache_exporter:
+    image: solsson/prometheus-exporter-apache
+    command: >-
+      --scrape_uri="http://apache/server-status?auto"
+    labels:
+      - traefik.http.routers.apache_exporter.rule=Host(`localhost`)
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+    command: >-
+      --config.file=/etc/prometheus/prometheus.yml
+    labels:
+      - traefik.http.routers.prometheus.rule=Host(`localhost`)
+    volumes:
+      - "./prometheus:/etc/prometheus"
+      - "./prometheus:/prometheus"
+  traefik:
+    image: traefik:latest
+    ports:
+      # The HTTP port
+      - "81:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+      - "./traefik/traefik.yml:/traefik.yml"
+      #- "./traefik/dynamic:/etc/traefik/dynamic"
+    labels:
+      - "traefik.http.middlewares.traefik.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/,test2:$$apr1$$d9hr9HBB$$4HxwgUir3HP4EsggP/QNo0"
