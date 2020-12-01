@@ -38,5 +38,13 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
       - "./traefik/traefik.yml:/traefik.yml"
-      #- "./traefik/dynamic:/etc/traefik/dynamic"
-
+  traefik2:
+    image: traefik:latest
+    ports:
+      # The HTTP port
+      - "82:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8181:8080"
+    volumes:
+      - "./traefik/traefik2.yml:/traefik.yml"
+      - "./traefik/dynamic2:/etc/traefik/dynamic"

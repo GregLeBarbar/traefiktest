@@ -3,7 +3,8 @@ global:
   sendAnonymousUsage: false
 
 providers:
-  docker: {}
+  file:
+    directory: "/etc/traefik/dynamic"
 
 log:
   level: DEBUG
@@ -11,3 +12,7 @@ log:
 api:
   dashboard: true
   insecure: true
+
+entryPoints:
+  web:
+    address: ":80"
